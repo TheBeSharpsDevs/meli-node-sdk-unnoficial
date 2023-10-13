@@ -17,26 +17,6 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm test
-      
-      - name: Get current package version
-        uses: martinbeentjes/npm-get-version-action@v1.2.3
-        id: package-version
-
-      - name: Create Git Tag
-        uses: actions/github-script@v6
-        env:
-          TAG: v${{ steps.package-version.outputs.current-version}}
-          SUFFIX: -meli-sdk-unnoficial
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            const {TAG, SUFFIX} = process.env
-            await github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `refs/tags/${TAG}${SUFFIX}`,
-              sha: context.sha
-            })
       - uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}

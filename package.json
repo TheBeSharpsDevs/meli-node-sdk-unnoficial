@@ -1,0 +1,63 @@
+{
+  "name": "meli-node-sdk-unnoficial",
+  "version": "0.0.1",
+  "description": "A Mercadolibre NodeJS SDK with the goal of be the most updated SKD available for NodeJS",
+  "main": "dist/index.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "jest --no-cache --runInBand --detectOpenHandles --passWithNoTests"
+  },
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "axios": "1.5.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.5",
+    "@typescript-eslint/eslint-plugin": "6.7.5",
+    "commitlint": "17.7.2",
+    "eslint": "8.51.0",
+    "eslint-config-prettier": "9.0.0",
+    "eslint-config-standard-with-typescript": "39.1.1",
+    "eslint-plugin-import": "2.28.1",
+    "eslint-plugin-n": "15.0.0 || 16.0.0 ",
+    "eslint-plugin-prettier": "5.0.1",
+    "eslint-plugin-promise": "6.1.1",
+    "husky": "8.0.3",
+    "jest": "29.7.0",
+    "prettier": "3.0.3",
+    "ts-jest": "29.1.1",
+    "typescript": "5.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "mercadolibre",
+    "meli",
+    "meli-node",
+    "node",
+    "sdk",
+    "mercadolibre-node-sdk"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": {
+    "email": "contacto.fritzlerilan@gmail.com",
+    "name": "Ilan Emanuel Fritzler",
+    "url": "https://www.github.com/ifritzler"
+  },
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheBeSharpsDevs/meli-node-sdk-unnoficial.git"
+  },
+  "bugs": {
+    "email": "contacto.fritzlerilan@gmail.com",
+    "url": "https://github.com/TheBeSharpsDevs/meli-node-sdk-unnoficial/issues"
+  },
+  "license": "ISC"
+}

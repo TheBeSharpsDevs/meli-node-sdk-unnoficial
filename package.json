@@ -53,7 +53,7 @@
   "contributors": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/TheBeSharpsDevs/meli-node-sdk-unnoficial.git"
+    "url": "git+https://github.com/TheBeSharpsDevs/meli-node-sdk-unnoficial.git"
   },
   "bugs": {
     "email": "contacto.fritzlerilan@gmail.com",

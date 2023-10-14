@@ -1,5 +1,7 @@
 <div align='center'>
 <h1>Mercadolibre SDK - NodeJS - No oficial</h1>
+<h2>⚠️⚠️<br>En desarrollo con poca o ninguna funcionabilidad. Atentos a nuevas versiones. En constante desarrollo y cambio de versiones. Revisa nuestro CHANGELOG.md en nuestro repositorio!
+<br>⚠️⚠️</h2>
 <p>Proyecto basado en nodejs con typescript que traslada a un sdk todas las interacciones posibles de la api de Mercadolibre. 
 </p><p style="background-color:#E9D577; color: #2b2b2b; font-weight: bold; padding: 1rem;">Este es un proyecto con objetivos de aprendizaje y no se recomienda su uso en contextos productivos.</p>
 

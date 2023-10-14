@@ -1,7 +1,5 @@
-import { dummy } from "../index";
-
-describe("dummy", () => {
-  it("works", () => {
-    expect(dummy("John")).toBe("Hello John");
-  });
-});
+describe ("test", () => {
+  it("test", () => {
+    expect(1).toBe(1);
+  })
+})

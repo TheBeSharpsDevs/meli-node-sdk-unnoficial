@@ -1,1 +1,12 @@
-src/tests/
+src/**/*
+.vscode
+.github/
+.husky/
+.env*
+.eslintrc.json
+.prettierignore
+
+pnpm*
+node_modules
+prettier*
+jest.config.js

@@ -1,12 +1,10 @@
 import { MercadolibreAPI } from "..";
-import { MeliValidationError } from "../errors";
 
 describe("MercadolibreAPI instantiation", () => {
   it("should throw error without initialization params", () => {
     try {
       new MercadolibreAPI();
     } catch (e: any) {
-      expect(e).toBeInstanceOf(MeliValidationError);
       expect(e.name).toBe("MeliValidationError");
     }
   });

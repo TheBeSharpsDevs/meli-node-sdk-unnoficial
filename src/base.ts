@@ -77,7 +77,11 @@ export enum GrantTypeEnum {
 
 export interface IMercadolibreAPIAuth {
   getAuthenticationUrl(params: AuthenticationParams): Promise<string>;
-  getAccessToken(code: string, redirectUri?: string, codeVerifier?: string): Promise<IAccessTokenResponse>
+  getAccessToken(
+    code: string,
+    redirectUri?: string,
+    codeVerifier?: string,
+  ): Promise<IAccessTokenResponse>;
 }
 
 export const DEFAULT_SCOPE = "offline_access read write";

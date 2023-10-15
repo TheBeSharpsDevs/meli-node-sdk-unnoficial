@@ -25,7 +25,10 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   private country: Country | null;
   private client: AxiosInstance;
 
-  constructor(config?: IMercadolibreAPIConfig, options?: { client?: AxiosInstance }) {
+  constructor(
+    config?: IMercadolibreAPIConfig,
+    options?: { client?: AxiosInstance },
+  ) {
     this.clientId =
       config?.clientId ?? (process.env.MERCADOLIBRE_APP_ID as string);
     this.clientSecret =
@@ -48,7 +51,6 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   }
 
   async getAuthenticationUrl(params?: AuthenticationParams): Promise<string> {
-    console.log(!params?.redirectUri && !this.redirectUri);
     if (!params?.redirectUri && !this.redirectUri) {
       throw new Error(
         "redirectUri is required in configuration or environment",
@@ -79,11 +81,6 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     return authenticationUrl.toString();
   }
 
-  /**
-   * This function has not been tested and should not be used in production.
-   * @todo
-   * @deprecated This function is in development, and its functionality is not guaranteed.
-   */
   async getAccessToken(
     code: string,
     redirectUri?: string,
@@ -102,7 +99,11 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
       })
       .catch((error: Error | AxiosError) => {
         if (error instanceof AxiosError) {
-          throw new MeliError(error.response?.data.error, error.stack, error.response?.status)
+          throw new MeliError(
+            error.response?.data.error,
+            error.stack,
+            error.response?.status,
+          );
         }
         throw error;
       });

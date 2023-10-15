@@ -11,6 +11,7 @@ import {
   createAxios,
 } from "../base";
 import { countries } from "../countries";
+import { MeliValidationError } from "../errors";
 
 const EXCHANGE_TOKEN_PATH = "/oauth/token";
 
@@ -29,17 +30,25 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     config?: IMercadolibreAPIConfig;
   }) {
     const { config, request } = params;
-    this.clientId = config?.clientId ?? String(process.env.MERCADOLIBRE_APP_ID);
+    this.clientId =
+      config?.clientId ?? (process.env.MERCADOLIBRE_APP_ID as string);
     this.clientSecret =
-      config?.clientSecret ?? String(process.env.MERCADOLIBRE_CLIENT_SECRET);
+      config?.clientSecret ??
+      (process.env.MERCADOLIBRE_CLIENT_SECRET as string);
     this.redirectUri =
-      config?.redirectUri ?? String(process.env.MERCADOLIBRE_REDIRECT_URI);
+      config?.redirectUri ?? (process.env.MERCADOLIBRE_REDIRECT_URI as string);
     this.scope = config?.scope ?? DEFAULT_SCOPE;
     this.accessToken = config?.accessToken ?? null;
     this.refreshToken = config?.refreshToken ?? null;
     this.country =
       countries.find((country) => country.domain_url == config?.domain) ?? null;
     this.request = request ?? createAxios(config?.domain ?? "com.ar");
+
+    if (!this.clientId || !this.clientSecret || !this.redirectUri) {
+      throw new MeliValidationError(
+        "Params clientId, clientSecret and redirectUri are required within configuration or environment scope.",
+      );
+    }
   }
 
   async getAuthenticationUrl(params: AuthenticationParams): Promise<string> {

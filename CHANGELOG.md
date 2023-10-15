@@ -10,3 +10,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add Authentication URL retriever with configuration params.
 - New CHANGELOG file based https://keepachangelog.com/en/1.0.0/
+- Add testing for new features.

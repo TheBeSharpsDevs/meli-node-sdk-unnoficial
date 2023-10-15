@@ -2,3 +2,6 @@ node_modules/*
 .husky/*
 tsconfig.json
 dist/*
+.github
+*.md
+*.yml

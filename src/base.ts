@@ -73,6 +73,7 @@ export interface IMercadolibreErrorResponse {
 export enum GrantTypeEnum {
   CODE = "code",
   AUTHORIZATION_CODE = "authorization_code",
+  REFRESH_TOKEN = "refresh_token",
 }
 
 export interface IMercadolibreAPIAuth {
@@ -82,6 +83,7 @@ export interface IMercadolibreAPIAuth {
     redirectUri?: string,
     codeVerifier?: string,
   ): Promise<IAccessTokenResponse>;
+  refreshAccessToken(refreshToken: string): Promise<IAccessTokenResponse>;
 }
 
 export const DEFAULT_SCOPE = "offline_access read write";

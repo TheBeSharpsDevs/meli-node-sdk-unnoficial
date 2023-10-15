@@ -10,3 +10,4 @@ pnpm*
 node_modules
 prettier*
 jest.config.js
+tsconfig.json

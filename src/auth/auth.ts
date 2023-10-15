@@ -25,11 +25,13 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   private country: Country | null;
   private request: AxiosInstance;
 
-  constructor(params: {
+  constructor(params?: {
     request?: AxiosInstance;
     config?: IMercadolibreAPIConfig;
   }) {
-    const { config, request } = params;
+    const config = params?.config;
+    const request = params?.request;
+    
     this.clientId =
       config?.clientId ?? (process.env.MERCADOLIBRE_APP_ID as string);
     this.clientSecret =
@@ -42,7 +44,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     this.refreshToken = config?.refreshToken ?? null;
     this.country =
       countries.find((country) => country.domain_url == config?.domain) ?? null;
-    this.request = request ?? createAxios(config?.domain ?? "com.ar");
+    this.request = request ?? createAxios(config?.domain);
 
     if (!this.clientId || !this.clientSecret || !this.redirectUri) {
       throw new MeliValidationError(
@@ -56,7 +58,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
       throw new Error("redirectUri is required");
     }
     const authenticationUrl = new URL(
-      `https://auth.mercadolibre${
+      `https://auth.mercadolibre.${
         this.country?.domain_url || "com.ar"
       }/authorization`,
     );

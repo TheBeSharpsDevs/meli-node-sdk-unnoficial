@@ -25,7 +25,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   private country: Country | null;
   private client: AxiosInstance;
 
-  constructor(config?: IMercadolibreAPIConfig) {
+  constructor(config?: IMercadolibreAPIConfig, options?: { client?: AxiosInstance }) {
     this.clientId =
       config?.clientId ?? (process.env.MERCADOLIBRE_APP_ID as string);
     this.clientSecret =
@@ -38,7 +38,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     this.refreshToken = config?.refreshToken ?? null;
     this.country =
       countries.find((country) => country.domain_url == config?.domain) ?? null;
-    this.client = createAxios();
+    this.client = options?.client ?? createAxios();
 
     if (!this.clientId || !this.clientSecret) {
       throw new MeliValidationError(
@@ -102,7 +102,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
       })
       .catch((error: Error | AxiosError) => {
         if (error instanceof AxiosError) {
-          throw new MeliError(error.cause?.message!, error.stack, error.response?.status)
+          throw new MeliError(error.response?.data.error, error.stack, error.response?.status)
         }
         throw error;
       });

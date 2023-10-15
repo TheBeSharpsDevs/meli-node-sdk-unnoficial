@@ -6,9 +6,9 @@ export class MercadolibreAPI {
   public auth: MercadolibreAPIAuth;
   protected request: AxiosInstance;
 
-  constructor(config?: IMercadolibreAPIConfig) {
+  constructor(config?: IMercadolibreAPIConfig, options?: { client?: AxiosInstance}) {
     try {
-      this.request = createAxios();
+      this.request = options?.client ?? createAxios();
       this.auth = new MercadolibreAPIAuth(config);
     } catch (e) {
       throw e;

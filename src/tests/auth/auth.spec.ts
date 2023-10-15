@@ -1,6 +1,7 @@
+import MockAdapter from 'axios-mock-adapter';
 import { MercadolibreAPI } from "../..";
 import { MercadolibreAPIAuth } from "../../auth/auth";
-import { IMercadolibreAPIConfig } from "../../base";
+import { IMercadolibreAPIConfig, createAxios } from "../../base";
 import { MeliValidationError } from "../../errors";
 
 describe("MercadolibreAPIAuth", () => {
@@ -89,4 +90,68 @@ describe("MercadolibreAPIAuth", () => {
       expect(authenticationUrl).toContain("client_id=3698383169153869");
     });
   });
+
+  describe("getAccessToken", () => {
+  let auth: MercadolibreAPIAuth;
+  let mockAxios: MockAdapter;
+
+  beforeEach(() => {
+    const client = createAxios()
+    mockAxios = new MockAdapter(client);
+    auth = new MercadolibreAPIAuth({
+      clientId: 'your-client-id',
+      clientSecret: 'your-client-secret',
+      redirectUri: 'your-redirect-uri',
+    }, { client });
+  });
+
+  afterEach(() => {
+    mockAxios.restore();
+  });
+
+  it('should get access token successfully', async () => {
+    // Define the mock response from the external API
+    const mockAccessTokenResponse = {
+      access_token: "APP_USR-123456-090515-8cc4448aac10d5105474e1351-1234567",
+      token_type: "bearer",
+      expires_in: 10800,
+      scope: "offline_access read write",
+      user_id: 1234567,
+      refresh_token: "TG-5b9032b4e23464aed1f959f-1234567"
+    };
+
+    // Mock the Axios request to the external API
+    mockAxios.onPost('/oauth/token').reply(200, mockAccessTokenResponse);
+
+    // Call the getAccessToken function
+    const code = 'your-auth-code';
+    const response = await auth.getAccessToken(code);
+
+    // Assertions
+    expect(response.access_token).toEqual(mockAccessTokenResponse.access_token);
+    expect(response.token_type).toEqual(mockAccessTokenResponse.token_type);
+    expect(response.expires_in).toEqual(mockAccessTokenResponse.expires_in);
+    expect(response.refresh_token).toEqual(mockAccessTokenResponse.refresh_token);
+    expect(response.user_id).toEqual(mockAccessTokenResponse.user_id);
+    expect(response.scope).toEqual(mockAccessTokenResponse.scope);
+  });
+
+  it('should handle errors when getting access token', async () => {
+    // Mock an error response from the external API
+    mockAxios.onPost('/oauth/token').reply(400, { error: 'invalid_grant' });
+
+    // Call the getAccessToken function
+    const code = 'your-auth-code';
+
+    try {
+      await auth.getAccessToken(code);
+    } catch (error: any) {
+      // Assert that the function correctly throws an error
+      expect(error).toBeInstanceOf(Error);
+      expect(error.name).toEqual('MeliError');
+      expect(error.status).toEqual(400);
+      expect(error.reason).toEqual('invalid_grant');
+    }
+  });
+  })
 });

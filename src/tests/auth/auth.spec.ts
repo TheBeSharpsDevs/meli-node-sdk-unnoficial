@@ -1,5 +1,6 @@
+import { AxiosInstance } from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { MercadolibreAPI } from "../..";
+import { MeliError, MeliValidationError, MercadolibreAPI } from "../..";
 import { MercadolibreAPIAuth } from "../../auth/auth";
 import { IMercadolibreAPIConfig, createAxios } from "../../base";
 
@@ -17,6 +18,7 @@ describe("MercadolibreAPIAuth", () => {
     try {
       new MercadolibreAPIAuth();
     } catch (e: any) {
+      expect(e).toBeInstanceOf(MeliValidationError);
       expect(e.name).toBe("MeliValidationError");
     }
   });
@@ -152,11 +154,104 @@ describe("MercadolibreAPIAuth", () => {
         await auth.getAccessToken(code);
       } catch (error: any) {
         // Assert that the function correctly throws an error
-        expect(error).toBeInstanceOf(Error);
+        expect(error).toBeInstanceOf(MeliError);
         expect(error.name).toEqual("MeliError");
         expect(error.status).toEqual(400);
         expect(error.reason).toEqual("invalid_grant");
       }
+    });
+  });
+
+  describe("refreshAccessToken", () => {
+    let client: AxiosInstance;
+    let mockAxios: MockAdapter;
+
+    beforeEach(() => {
+      client = createAxios();
+      mockAxios = new MockAdapter(client);
+    });
+
+    afterEach(() => {
+      mockAxios.restore();
+    });
+
+    it("should refresh the access token", async () => {
+      const auth = new MercadolibreAPIAuth(
+        {
+          clientId: "your-client-id",
+          clientSecret: "your-client-secret",
+          redirectUri: "your-redirect-uri",
+        },
+        {
+          client,
+        },
+      );
+      const refreshToken = "TG-5b9032b4e23464aed1f959f-1234567";
+      const mockAccessTokenResponse = {
+        access_token: "APP_USR-123456-090515-8cc4448aac10d5105474e1351-1234567",
+        token_type: "bearer",
+        expires_in: 10800,
+        scope: "offline_access read write",
+        user_id: 1234567,
+        refresh_token: "TG-NEW-5b9032b4e23464aed1f959f-1234567",
+      };
+
+      mockAxios.onPost("/oauth/token").reply(200, mockAccessTokenResponse);
+      const newToken = await auth.refreshAccessToken(refreshToken);
+      expect(newToken.access_token).toEqual(
+        mockAccessTokenResponse.access_token,
+      );
+      expect(newToken.token_type).toEqual(mockAccessTokenResponse.token_type);
+      expect(newToken.expires_in).toEqual(mockAccessTokenResponse.expires_in);
+      expect(newToken.refresh_token).toEqual(
+        mockAccessTokenResponse.refresh_token,
+      );
+      expect(newToken.user_id).toEqual(mockAccessTokenResponse.user_id);
+      expect(newToken.scope).toEqual(mockAccessTokenResponse.scope);
+      expect(newToken.refresh_token).not.toEqual(refreshToken);
+    });
+
+    it("an empty refresh token string should throws an error", async () => {
+      const auth = new MercadolibreAPIAuth({
+        clientId: "your-client-id",
+        clientSecret: "your-client-secret",
+        redirectUri: "your-redirect-uri",
+      });
+      const refreshToken = "";
+      await expect(auth.refreshAccessToken(refreshToken)).rejects.toThrow(
+        "refreshToken is required",
+      );
+    });
+
+    it("an empty refresh token param should throws an error", async () => {
+      const auth = new MercadolibreAPIAuth({
+        clientId: "your-client-id",
+        clientSecret: "your-client-secret",
+        redirectUri: "your-redirect-uri",
+      });
+      const refreshToken = "";
+      await expect(auth.refreshAccessToken(refreshToken)).rejects.toThrow(
+        "refreshToken is required",
+      );
+    });
+
+    it("should refresh the access token", async () => {
+      const auth = new MercadolibreAPIAuth(
+        {
+          clientId: "your-client-id",
+          clientSecret: "your-client-secret",
+          redirectUri: "your-redirect-uri",
+        },
+        {
+          client,
+        },
+      );
+      const refreshToken = "TG-5b9032b4e23464aed1f959f-1234567";
+
+      mockAxios.onPost("/oauth/token").reply(400, {});
+      await expect(auth.refreshAccessToken(refreshToken)).rejects.toThrowError(
+        MeliError,
+      );
     });
   });
 });

@@ -15,3 +15,9 @@ export class MercadolibreAPI {
     }
   }
 }
+
+export * from './auth/auth';
+export * from './base';
+export * from './countries';
+export * from './errors';
+export default MercadolibreAPI

@@ -7,7 +7,8 @@
     "format": "prettier --write .",
     "build": "tsc",
     "prepare": "npm run build",
-    "test": "jest --no-cache --runInBand --detectOpenHandles --passWithNoTests"
+    "test": "jest --no-cache --runInBand --detectOpenHandles --passWithNoTests",
+    "test:watch": "jest --no-cache --runInBand --detectOpenHandles --passWithNoTests --watch"
   },
   "types": "dist/index.d.ts",
   "dependencies": {

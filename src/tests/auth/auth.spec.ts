@@ -1,5 +1,6 @@
+import { MercadolibreAPI } from "../..";
 import { MercadolibreAPIAuth } from "../../auth/auth";
-import { AuthenticationParams, IMercadolibreAPIConfig } from "../../base";
+import { IMercadolibreAPIConfig } from "../../base";
 import { MeliValidationError } from "../../errors";
 
 describe("MercadolibreAPIAuth", () => {
@@ -38,23 +39,16 @@ describe("MercadolibreAPIAuth", () => {
   });
 
   describe("getAuthenticationUrl", () => {
-    const config: IMercadolibreAPIConfig = {
-      clientId: "your-client-id",
-      clientSecret: "your-client-secret",
-      redirectUri: "your-redirect-uri",
-      scope: "your-scope",
-      domain: "com.bo",
-    };
-
-    const mercadolibreAuth = new MercadolibreAPIAuth({ config });
-
     it("should generate a valid authentication uri", async () => {
-      const params: AuthenticationParams = {
-        redirectUri: "https://your-redirect-uri.com",
+      const config: IMercadolibreAPIConfig = {
+        clientId: "your-client-id",
+        clientSecret: "your-client-secret",
+        redirectUri: "your-redirect-uri.com",
+        scope: "your-scope",
+        domain: "com.bo",
       };
-
-      const authenticationUrl =
-        await mercadolibreAuth.getAuthenticationUrl(params);
+      const mercadolibreAuth = new MercadolibreAPIAuth({ config });
+      const authenticationUrl = await mercadolibreAuth.getAuthenticationUrl();
       expect(authenticationUrl).toContain("https://auth.mercadolibre.com.bo");
       expect(authenticationUrl).toContain("response_type=code");
       expect(authenticationUrl).toContain("your-redirect-uri.com");
@@ -62,10 +56,43 @@ describe("MercadolibreAPIAuth", () => {
     });
 
     it("should throws an error if redirectUri is missing", async () => {
-      const params = {};
+      const mercadolibreAuth = new MercadolibreAPIAuth({
+        config: {
+          clientId: "your-client-id",
+          clientSecret: "your-client-secret",
+        },
+      });
+      await expect(mercadolibreAuth.getAuthenticationUrl()).rejects.toThrow(
+        "redirectUri is required",
+      );
+    });
+
+    it("should NOT throws an error if redirectUri is setted on getAuthenticationUrl", async () => {
+      const mercadolibreAuth = new MercadolibreAPIAuth({
+        config: {
+          clientId: "your-client-id",
+          clientSecret: "your-client-secret",
+        },
+      });
       await expect(
-        mercadolibreAuth.getAuthenticationUrl(params),
-      ).rejects.toThrow("redirectUri is required");
+        mercadolibreAuth.getAuthenticationUrl({
+          redirectUri: "your-redurec-uri.com",
+        }),
+      ).resolves.toContain("your-redurec-uri.com");
+    });
+
+    it("should take redirectUri from MercadolibreAPI constructor", async () => {
+      const meli = new MercadolibreAPI({
+        clientId: "3698383169153869",
+        clientSecret: "V2o1Z8VGBjlhc1xzCZmgkcVCa37yzrdp",
+        redirectUri: "http://localhost:3000/callback",
+      });
+      expect(meli).toBeInstanceOf(MercadolibreAPI);
+      const authenticationUrl = await meli.auth.getAuthenticationUrl();
+      expect(authenticationUrl).toContain("https://auth.mercadolibre.com.ar");
+      expect(authenticationUrl).toContain("response_type=code");
+      expect(authenticationUrl).toContain("localhost");
+      expect(authenticationUrl).toContain("client_id=3698383169153869");
     });
   });
 });

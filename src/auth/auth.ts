@@ -46,16 +46,19 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
       countries.find((country) => country.domain_url == config?.domain) ?? null;
     this.request = request ?? createAxios(config?.domain);
 
-    if (!this.clientId || !this.clientSecret || !this.redirectUri) {
+    if (!this.clientId || !this.clientSecret) {
       throw new MeliValidationError(
-        "Params clientId, clientSecret and redirectUri are required within configuration or environment scope.",
+        "Params clientId, clientSecret are required within configuration or environment scope.",
       );
     }
   }
 
-  async getAuthenticationUrl(params: AuthenticationParams): Promise<string> {
-    if (!params?.redirectUri || !this.redirectUri) {
-      throw new Error("redirectUri is required");
+  async getAuthenticationUrl(params?: AuthenticationParams): Promise<string> {
+    console.log(!params?.redirectUri && !this.redirectUri);
+    if (!params?.redirectUri && !this.redirectUri) {
+      throw new Error(
+        "redirectUri is required in configuration or environment",
+      );
     }
     const authenticationUrl = new URL(
       `https://auth.mercadolibre.${
@@ -68,7 +71,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
       params?.redirectUri ?? this.redirectUri,
     );
     authenticationUrl.searchParams.append("client_id", this.clientId);
-    if (params.pkce) {
+    if (params?.pkce) {
       authenticationUrl.searchParams.append(
         "code_challenge",
         params.codeChallenge,

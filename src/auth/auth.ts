@@ -11,7 +11,7 @@ import {
   createAxios,
 } from "../base";
 import { countries } from "../countries";
-import { MeliValidationError } from "../errors";
+import { MeliError, MeliValidationError } from "../errors";
 
 const EXCHANGE_TOKEN_PATH = "/oauth/token";
 
@@ -23,15 +23,9 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   protected accessToken?: string | null;
   protected refreshToken?: string | null;
   private country: Country | null;
-  private request: AxiosInstance;
+  private client: AxiosInstance;
 
-  constructor(params?: {
-    request?: AxiosInstance;
-    config?: IMercadolibreAPIConfig;
-  }) {
-    const config = params?.config;
-    const request = params?.request;
-
+  constructor(config?: IMercadolibreAPIConfig) {
     this.clientId =
       config?.clientId ?? (process.env.MERCADOLIBRE_APP_ID as string);
     this.clientSecret =
@@ -44,7 +38,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     this.refreshToken = config?.refreshToken ?? null;
     this.country =
       countries.find((country) => country.domain_url == config?.domain) ?? null;
-    this.request = request ?? createAxios(config?.domain);
+    this.client = createAxios();
 
     if (!this.clientId || !this.clientSecret) {
       throw new MeliValidationError(
@@ -92,22 +86,23 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
    */
   async getAccessToken(
     code: string,
+    redirectUri?: string,
     codeVerifier?: string,
   ): Promise<IAccessTokenResponse> {
-    const axiosResponse = await this.request
+    const axiosResponse = await this.client
       .post<IAccessTokenResponse>(EXCHANGE_TOKEN_PATH, null, {
         params: {
           grant_type: GrantTypeEnum.AUTHORIZATION_CODE,
           client_id: this.clientId,
           client_secret: this.clientSecret,
           code: code,
-          redirect_uri: this.redirectUri,
+          redirect_uri: redirectUri ?? this.redirectUri,
           code_verifier: codeVerifier ?? undefined,
         },
       })
       .catch((error: Error | AxiosError) => {
         if (error instanceof AxiosError) {
-          error.response?.data;
+          throw new MeliError(error.cause?.message!, error.stack, error.response?.status)
         }
         throw error;
       });

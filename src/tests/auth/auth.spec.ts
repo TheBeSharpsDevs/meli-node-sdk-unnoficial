@@ -6,11 +6,9 @@ import { MeliValidationError } from "../../errors";
 describe("MercadolibreAPIAuth", () => {
   it("should be available without MercadolibreAPI instance", () => {
     const meli = new MercadolibreAPIAuth({
-      config: {
-        clientId: "12345678910",
-        clientSecret: "ultrasecret",
-        redirectUri: "http://localhost:3000/callback",
-      },
+      clientId: "12345678910",
+      clientSecret: "ultrasecret",
+      redirectUri: "http://localhost:3000/callback",
     });
     expect(meli).toBeInstanceOf(MercadolibreAPIAuth);
   });
@@ -47,7 +45,7 @@ describe("MercadolibreAPIAuth", () => {
         scope: "your-scope",
         domain: "com.bo",
       };
-      const mercadolibreAuth = new MercadolibreAPIAuth({ config });
+      const mercadolibreAuth = new MercadolibreAPIAuth(config);
       const authenticationUrl = await mercadolibreAuth.getAuthenticationUrl();
       expect(authenticationUrl).toContain("https://auth.mercadolibre.com.bo");
       expect(authenticationUrl).toContain("response_type=code");
@@ -57,10 +55,8 @@ describe("MercadolibreAPIAuth", () => {
 
     it("should throws an error if redirectUri is missing", async () => {
       const mercadolibreAuth = new MercadolibreAPIAuth({
-        config: {
-          clientId: "your-client-id",
-          clientSecret: "your-client-secret",
-        },
+        clientId: "your-client-id",
+        clientSecret: "your-client-secret",
       });
       await expect(mercadolibreAuth.getAuthenticationUrl()).rejects.toThrow(
         "redirectUri is required",
@@ -69,10 +65,8 @@ describe("MercadolibreAPIAuth", () => {
 
     it("should NOT throws an error if redirectUri is setted on getAuthenticationUrl", async () => {
       const mercadolibreAuth = new MercadolibreAPIAuth({
-        config: {
-          clientId: "your-client-id",
-          clientSecret: "your-client-secret",
-        },
+        clientId: "your-client-id",
+        clientSecret: "your-client-secret",
       });
       await expect(
         mercadolibreAuth.getAuthenticationUrl({

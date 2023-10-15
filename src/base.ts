@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export function createAxios(domain?: Domain) {
+export function createAxios() {
   return axios.create({
-    baseURL: `https://api.mercadolibre.${domain ?? "com.ar"}`,
+    baseURL: `https://api.mercadolibre.com`,
   });
 }
 

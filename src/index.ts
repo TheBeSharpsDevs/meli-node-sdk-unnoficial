@@ -8,8 +8,8 @@ export class MercadolibreAPI {
 
   constructor(config?: IMercadolibreAPIConfig) {
     try {
-      this.request = createAxios(config?.domain || "com.ar");
-      this.auth = new MercadolibreAPIAuth({ config, request: this.request });
+      this.request = createAxios();
+      this.auth = new MercadolibreAPIAuth(config);
     } catch (e) {
       throw e;
     }

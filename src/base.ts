@@ -2,7 +2,7 @@ import axios from "axios";
 
 export function createAxios(domain?: Domain) {
   return axios.create({
-    baseURL: `https://api.mercadolibre.${domain ?? 'com.ar'}`,
+    baseURL: `https://api.mercadolibre.${domain ?? "com.ar"}`,
   });
 }
 
@@ -45,11 +45,11 @@ export type AuthenticationParams =
     };
 
 export interface IMercadolibreAPIConfig {
-  clientId: string;
-  clientSecret: string;
-  scope: string;
-  domain: Domain;
   redirectUri?: string;
+  clientId?: string;
+  clientSecret?: string;
+  scope?: string;
+  domain?: Domain;
   accessToken?: string;
   refreshToken?: string;
 }

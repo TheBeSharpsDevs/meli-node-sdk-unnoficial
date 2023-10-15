@@ -70,4 +70,29 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
 
     return authenticationUrl.toString();
   }
+
+  async getAccessToken(
+    code: string,
+    codeVerifier?: string,
+  ): Promise<IAccessTokenResponse> {
+    const axiosResponse = await this.request
+      .post<IAccessTokenResponse>(EXCHANGE_TOKEN_PATH, null, {
+        params: {
+          grant_type: GrantTypeEnum.AUTHORIZATION_CODE,
+          client_id: this.clientId,
+          client_secret: this.clientSecret,
+          code: code,
+          redirect_uri: this.redirectUri,
+          code_verifier: codeVerifier ?? undefined,
+        },
+      })
+      .catch((error: Error | AxiosError) => {
+        if (error instanceof AxiosError) {
+          error.response?.data;
+        }
+        throw error;
+      });
+    const token = axiosResponse.data;
+    return token;
+  }
 }

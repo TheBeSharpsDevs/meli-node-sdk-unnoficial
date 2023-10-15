@@ -7,7 +7,11 @@ export class MercadolibreAPI {
   protected request: AxiosInstance;
 
   constructor(config?: IMercadolibreAPIConfig) {
-    this.request = createAxios(config?.domain || "com.ar");
-    this.auth = new MercadolibreAPIAuth({ config, request: this.request });
+    try {
+      this.request = createAxios(config?.domain || "com.ar");
+      this.auth = new MercadolibreAPIAuth({ config, request: this.request });
+    } catch (e) {
+      throw e;
+    }
   }
 }

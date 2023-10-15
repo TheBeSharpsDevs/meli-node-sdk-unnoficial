@@ -7,7 +7,7 @@ describe("MercadolibreAPI instantiation", () => {
       new MercadolibreAPI();
     } catch (e: any) {
       expect(e).toBeInstanceOf(MeliValidationError);
-      expect(e.name).toBe('MeliValidationError');
+      expect(e.name).toBe("MeliValidationError");
     }
   });
 

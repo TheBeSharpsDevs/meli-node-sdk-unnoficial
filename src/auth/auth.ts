@@ -31,7 +31,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   }) {
     const config = params?.config;
     const request = params?.request;
-    
+
     this.clientId =
       config?.clientId ?? (process.env.MERCADOLIBRE_APP_ID as string);
     this.clientSecret =
@@ -82,6 +82,11 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     return authenticationUrl.toString();
   }
 
+  /**
+   * This function has not been tested and should not be used in production.
+   * @todo
+   * @deprecated This function is in development, and its functionality is not guaranteed.
+   */
   async getAccessToken(
     code: string,
     codeVerifier?: string,

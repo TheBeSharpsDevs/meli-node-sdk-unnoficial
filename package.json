@@ -1,6 +1,6 @@
 {
   "name": "meli-node-sdk-unnoficial",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A Mercadolibre NodeJS SDK with the goal of be the most updated SKD available for NodeJS",
   "main": "dist/index.js",
   "scripts": {

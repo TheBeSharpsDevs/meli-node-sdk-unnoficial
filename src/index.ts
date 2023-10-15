@@ -6,18 +6,21 @@ export class MercadolibreAPI {
   public auth: MercadolibreAPIAuth;
   protected request: AxiosInstance;
 
-  constructor(config?: IMercadolibreAPIConfig) {
+  constructor(
+    config?: IMercadolibreAPIConfig,
+    options?: { client?: AxiosInstance },
+  ) {
     try {
-      this.request = createAxios(config?.domain || "com.ar");
-      this.auth = new MercadolibreAPIAuth({ config, request: this.request });
+      this.request = options?.client ?? createAxios();
+      this.auth = new MercadolibreAPIAuth(config);
     } catch (e) {
       throw e;
     }
   }
 }
 
-export * from './auth/auth';
-export * from './base';
-export * from './countries';
-export * from './errors';
-export default MercadolibreAPI
+export * from "./auth/auth";
+export * from "./base";
+export * from "./countries";
+export * from "./errors";
+export default MercadolibreAPI;

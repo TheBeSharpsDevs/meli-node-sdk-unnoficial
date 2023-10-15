@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export function createAxios(domain?: Domain) {
+export function createAxios() {
   return axios.create({
-    baseURL: `https://api.mercadolibre.${domain ?? "com.ar"}`,
+    baseURL: `https://api.mercadolibre.com`,
   });
 }
 
@@ -77,6 +77,11 @@ export enum GrantTypeEnum {
 
 export interface IMercadolibreAPIAuth {
   getAuthenticationUrl(params: AuthenticationParams): Promise<string>;
+  getAccessToken(
+    code: string,
+    redirectUri?: string,
+    codeVerifier?: string,
+  ): Promise<IAccessTokenResponse>;
 }
 
 export const DEFAULT_SCOPE = "offline_access read write";

@@ -11,7 +11,7 @@ import {
   createAxios,
 } from "../base";
 import { countries } from "../countries";
-import { MeliValidationError } from "../errors";
+import { MeliError, MeliValidationError } from "../errors";
 
 const EXCHANGE_TOKEN_PATH = "/oauth/token";
 
@@ -23,15 +23,12 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   protected accessToken?: string | null;
   protected refreshToken?: string | null;
   private country: Country | null;
-  private request: AxiosInstance;
+  private client: AxiosInstance;
 
-  constructor(params?: {
-    request?: AxiosInstance;
-    config?: IMercadolibreAPIConfig;
-  }) {
-    const config = params?.config;
-    const request = params?.request;
-
+  constructor(
+    config?: IMercadolibreAPIConfig,
+    options?: { client?: AxiosInstance },
+  ) {
     this.clientId =
       config?.clientId ?? (process.env.MERCADOLIBRE_APP_ID as string);
     this.clientSecret =
@@ -44,7 +41,7 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     this.refreshToken = config?.refreshToken ?? null;
     this.country =
       countries.find((country) => country.domain_url == config?.domain) ?? null;
-    this.request = request ?? createAxios(config?.domain);
+    this.client = options?.client ?? createAxios();
 
     if (!this.clientId || !this.clientSecret) {
       throw new MeliValidationError(
@@ -54,7 +51,6 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   }
 
   async getAuthenticationUrl(params?: AuthenticationParams): Promise<string> {
-    console.log(!params?.redirectUri && !this.redirectUri);
     if (!params?.redirectUri && !this.redirectUri) {
       throw new Error(
         "redirectUri is required in configuration or environment",
@@ -85,29 +81,29 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     return authenticationUrl.toString();
   }
 
-  /**
-   * This function has not been tested and should not be used in production.
-   * @todo
-   * @deprecated This function is in development, and its functionality is not guaranteed.
-   */
   async getAccessToken(
     code: string,
+    redirectUri?: string,
     codeVerifier?: string,
   ): Promise<IAccessTokenResponse> {
-    const axiosResponse = await this.request
+    const axiosResponse = await this.client
       .post<IAccessTokenResponse>(EXCHANGE_TOKEN_PATH, null, {
         params: {
           grant_type: GrantTypeEnum.AUTHORIZATION_CODE,
           client_id: this.clientId,
           client_secret: this.clientSecret,
           code: code,
-          redirect_uri: this.redirectUri,
+          redirect_uri: redirectUri ?? this.redirectUri,
           code_verifier: codeVerifier ?? undefined,
         },
       })
       .catch((error: Error | AxiosError) => {
         if (error instanceof AxiosError) {
-          error.response?.data;
+          throw new MeliError(
+            error.response?.data.error,
+            error.stack,
+            error.response?.status,
+          );
         }
         throw error;
       });

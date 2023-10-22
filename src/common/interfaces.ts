@@ -1,55 +1,56 @@
-import axios from "axios";
-
-export function createAxios() {
-  return axios.create({
-    baseURL: `https://api.mercadolibre.com`,
-  });
-}
+import { AuthenticationParams } from "./types";
 
 export interface Country {
   default_currency_id: string;
   id: string;
   name: string;
-  domain_url: Domain;
+  domain_url:
+    | "hn"
+    | "cl"
+    | "com.uy"
+    | "com.do"
+    | "com.bo"
+    | "com.ar"
+    | "com.cu"
+    | "co.ve"
+    | "com.gt"
+    | "com.br"
+    | "co.cr"
+    | "com.co"
+    | "com.pa"
+    | "com.ec"
+    | "com.pe"
+    | "com.py"
+    | "com.sv"
+    | "com.mx"
+    | "com.ni";
 }
-
-export type Domain =
-  | "hn"
-  | "cl"
-  | "com.uy"
-  | "com.do"
-  | "com.bo"
-  | "com.ar"
-  | "com.cu"
-  | "co.ve"
-  | "com.gt"
-  | "com.br"
-  | "co.cr"
-  | "com.co"
-  | "com.pa"
-  | "com.ec"
-  | "com.pe"
-  | "com.py"
-  | "com.sv"
-  | "com.mx"
-  | "com.ni";
-
-export type AuthenticationParams =
-  | { redirectUri?: string; state?: string; pkce?: false }
-  | {
-      redirectUri?: string;
-      state?: string;
-      pkce: true;
-      codeChallenge: string;
-      codeChallengeMethod: "S256" | "plain";
-    };
 
 export interface IMercadolibreAPIConfig {
   redirectUri?: string;
   clientId?: string;
   clientSecret?: string;
   scope?: string;
-  domain?: Domain;
+  domain?:
+    | "hn"
+    | "cl"
+    | "com.uy"
+    | "com.do"
+    | "com.bo"
+    | "com.ar"
+    | "com.cu"
+    | "co.ve"
+    | "com.gt"
+    | "com.br"
+    | "co.cr"
+    | "com.co"
+    | "com.pa"
+    | "com.ec"
+    | "com.pe"
+    | "com.py"
+    | "com.sv"
+    | "com.mx"
+    | "com.ni";
   accessToken?: string;
   refreshToken?: string;
 }
@@ -70,12 +71,6 @@ export interface IMercadolibreErrorResponse {
   cause: any[];
 }
 
-export enum GrantTypeEnum {
-  CODE = "code",
-  AUTHORIZATION_CODE = "authorization_code",
-  REFRESH_TOKEN = "refresh_token",
-}
-
 export interface IMercadolibreAPIAuth {
   getAuthenticationUrl(params: AuthenticationParams): Promise<string>;
   getAccessToken(
@@ -85,5 +80,3 @@ export interface IMercadolibreAPIAuth {
   ): Promise<IAccessTokenResponse>;
   refreshAccessToken(refreshToken: string): Promise<IAccessTokenResponse>;
 }
-
-export const DEFAULT_SCOPE = "offline_access read write";

@@ -11,3 +11,4 @@ node_modules
 prettier*
 jest.config.js
 tsconfig.json
+vite.config.ts

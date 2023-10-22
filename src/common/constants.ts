@@ -1,4 +1,7 @@
-import { Country } from "./base";
+import { Country } from "./interfaces";
+
+export const DEFAULT_SCOPE = "offline_access read write";
+export const EXCHANGE_TOKEN_PATH = "/oauth/token";
 
 export const countries: Country[] = [
   {

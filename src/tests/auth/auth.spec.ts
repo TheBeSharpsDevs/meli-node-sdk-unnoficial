@@ -1,9 +1,8 @@
 import { AxiosInstance } from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { MercadolibreAPIAuth } from "../../auth";
-import { IMercadolibreAPIConfig, createClient } from "../../common";
-import { MeliError, MeliValidationError } from "../../errors";
-import { MercadolibreAPI } from "../../mercadolibre.api";
+import { MeliError, MeliValidationError, MercadolibreAPI } from "../..";
+import { MercadolibreAPIAuth } from "../../auth/auth";
+import { IMercadolibreAPIConfig, createAxios } from "../../base";
 
 describe("MercadolibreAPIAuth", () => {
   it("should be available without MercadolibreAPI instance", () => {
@@ -97,7 +96,7 @@ describe("MercadolibreAPIAuth", () => {
     let mockAxios: MockAdapter;
 
     beforeEach(() => {
-      const client = createClient();
+      const client = createAxios();
       mockAxios = new MockAdapter(client);
       auth = new MercadolibreAPIAuth(
         {
@@ -168,7 +167,7 @@ describe("MercadolibreAPIAuth", () => {
     let mockAxios: MockAdapter;
 
     beforeEach(() => {
-      client = createClient();
+      client = createAxios();
       mockAxios = new MockAdapter(client);
     });
 

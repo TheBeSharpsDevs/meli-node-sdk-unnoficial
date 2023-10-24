@@ -1,8 +1,8 @@
-import { createClient } from "../common";
+import { createAxios } from "../base";
 
 describe("axios instance creation", () => {
   it("should create", () => {
-    const instance = createClient();
+    const instance = createAxios();
     expect(instance).toBeDefined();
   });
 });

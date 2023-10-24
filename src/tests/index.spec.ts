@@ -1,4 +1,4 @@
-import { MercadolibreAPI } from "../mercadolibre.api";
+import { MercadolibreAPI } from "..";
 
 describe("MercadolibreAPI instantiation", () => {
   it("should throw error without initialization params", () => {

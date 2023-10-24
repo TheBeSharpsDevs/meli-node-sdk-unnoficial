@@ -4,17 +4,18 @@ import {
   AuthenticationParams,
   Country,
   DEFAULT_SCOPE,
-  EXCHANGE_TOKEN_PATH,
   GrantTypeEnum,
   IAccessTokenResponse,
   IMercadolibreAPIAuth,
   IMercadolibreAPIConfig,
-  countries,
-  createClient,
-} from "../common";
+  createAxios,
+} from "../base";
+import { countries } from "../countries";
 import { MeliError, MeliValidationError } from "../errors";
 
-export default class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
+const EXCHANGE_TOKEN_PATH = "/oauth/token";
+
+export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   protected clientId: string;
   protected clientSecret: string;
   protected redirectUri: string;
@@ -40,7 +41,7 @@ export default class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     this.refreshToken = config?.refreshToken ?? null;
     this.country =
       countries.find((country) => country.domain_url == config?.domain) ?? null;
-    this.client = options?.client ?? createClient();
+    this.client = options?.client ?? createAxios();
 
     if (!this.clientId || !this.clientSecret) {
       throw new MeliValidationError(

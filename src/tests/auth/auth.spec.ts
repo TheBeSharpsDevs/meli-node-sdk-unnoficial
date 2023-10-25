@@ -1,8 +1,9 @@
 import { AxiosInstance } from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { MeliError, MeliValidationError, MercadolibreAPI } from "../..";
+import MercadolibreAPI from "../..";
 import { MercadolibreAPIAuth } from "../../auth/auth";
 import { IMercadolibreAPIConfig, createAxios } from "../../base";
+import { MeliError, MeliValidationError } from "../../errors";
 
 describe("MercadolibreAPIAuth", () => {
   it("should be available without MercadolibreAPI instance", () => {

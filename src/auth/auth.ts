@@ -1,17 +1,13 @@
 import { AxiosError, AxiosInstance } from "axios";
 import { URL } from "url";
 import {
-  AuthenticationParams,
   Country,
-  DEFAULT_SCOPE,
-  GrantTypeEnum,
-  IAccessTokenResponse,
-  IMercadolibreAPIAuth,
   IMercadolibreAPIConfig,
   createAxios,
 } from "../base";
 import { countries } from "../countries";
 import { MeliError, MeliValidationError } from "../errors";
+import { AuthenticationParams, DEFAULT_SCOPE, GrantTypeEnum, IAccessTokenResponse, IMercadolibreAPIAuth } from "./auth.interfaces";
 
 const EXCHANGE_TOKEN_PATH = "/oauth/token";
 

@@ -2,28 +2,36 @@
   "name": "meli-node-sdk-unnoficial",
   "version": "0.0.6",
   "description": "A Mercadolibre NodeJS SDK with the goal of be the most updated SKD available for NodeJS",
-  "main": "lib/index.js",
-  "module": "lib/index.mjs",
-  "types": "lib/index.d.ts",
+  "main": "lib/main.js",
+  "module": "lib/main.mjs",
+  "types": "./lib/main.d.ts",
   "type": "commonjs",
-  "exports": {
-    ".": {
-      "import": "./lib/index.mjs",
-      "require": "./lib/index.js",
-      "default": "./lib/index.mjs",
-      "types": "./lib/index.d.ts"
-    }
-  },
   "scripts": {
     "format": "prettier --write .",
-    "build": "tsup-node src/index.ts",
+    "build": "npm run clean && tsup-node",
+    "lint": "tsc",
     "prepare": "npm run build",
     "test": "jest --no-cache --runInBand --detectOpenHandles --passWithNoTests",
-    "test:watch": "jest --no-cache --runInBand --detectOpenHandles --passWithNoTests --watch"
+    "test:watch": "jest --no-cache --runInBand --detectOpenHandles --passWithNoTests --watch",
+    "clean": "rimraf lib"
   },
   "files": [
-    "lib"
+    "./lib/*"
   ],
+  "exports": {
+    ".": {
+      "import": "./lib/main.mjs",
+      "require": "./lib/main.js"
+    },
+    "./auth": {
+      "import": "./lib/auth.mjs",
+      "require": "./lib/auth.js"
+    },
+    "./errors": {
+      "import": "./lib/errors.mjs",
+      "require": "./lib/errors.js"
+    }
+  },
   "dependencies": {
     "axios": "1.5.1"
   },
@@ -32,6 +40,7 @@
     "@types/node": "^20.8.6",
     "@typescript-eslint/eslint-plugin": "6.7.5",
     "axios-mock-adapter": "^1.22.0",
+    "esbuild-plugin-file-path-extensions": "^1.0.0",
     "eslint": "8.51.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-config-standard-with-typescript": "39.1.1",
@@ -42,6 +51,7 @@
     "husky": "8.0.3",
     "jest": "29.7.0",
     "prettier": "3.0.3",
+    "rimraf": "^5.0.5",
     "ts-jest": "29.1.1",
     "tsup": "^7.2.0",
     "typescript": "5.2.2"

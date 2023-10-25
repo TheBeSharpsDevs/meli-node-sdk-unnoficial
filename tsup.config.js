@@ -1,8 +1,12 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
-  splitting: false,
+  entry: {
+    main: './src/index.ts',
+    auth: './src/auth/index.ts',
+    errors: './src/errors/index.ts',
+    base: './src/base.ts'
+  },
   sourcemap: true,
   clean: true,
   cjsInterop: true,
@@ -12,8 +16,5 @@ export default defineConfig({
   keepNames: true,
   target: 'es2020',
   platform: 'node',
-  terserOptions: {
-    compress: false,
-    module: true
-  }
+  bundle: true,
 })

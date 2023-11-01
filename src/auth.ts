@@ -4,14 +4,45 @@ import {
   Country,
   IMercadolibreAPIConfig,
   createAxios,
-} from "../base";
-import { countries } from "../countries";
-import { MeliError, MeliValidationError } from "../errors";
-import { AuthenticationParams, DEFAULT_SCOPE, GrantTypeEnum, IAccessTokenResponse, IMercadolibreAPIAuth } from "./auth.interfaces";
+} from "./base";
+import { countries } from "./countries";
+import { MeliError, MeliValidationError } from "./errors";
+
+type AuthenticationParams = { redirectUri?: string; state?: string; pkce?: false; } |
+{
+  redirectUri?: string;
+  state?: string;
+  pkce: true;
+  codeChallenge: string;
+  codeChallengeMethod: "S256" | "plain";
+};
+interface IAccessTokenResponse {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  scope: string;
+  user_id: number;
+  refresh_token: string;
+}
+enum GrantTypeEnum {
+  CODE = "code",
+  AUTHORIZATION_CODE = "authorization_code",
+  REFRESH_TOKEN = "refresh_token"
+}
+interface IMercadolibreAPIAuth {
+  getAuthenticationUrl(params: AuthenticationParams): Promise<string>;
+  getAccessToken(
+    code: string,
+    redirectUri?: string,
+    codeVerifier?: string
+  ): Promise<IAccessTokenResponse>;
+  refreshAccessToken(refreshToken: string): Promise<IAccessTokenResponse>;
+}
+const DEFAULT_SCOPE = "offline_access read write";
 
 const EXCHANGE_TOKEN_PATH = "/oauth/token";
 
-export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
+class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
   protected clientId: string;
   protected clientSecret: string;
   protected redirectUri: string;
@@ -140,3 +171,9 @@ export class MercadolibreAPIAuth implements IMercadolibreAPIAuth {
     return token;
   }
 }
+
+export {
+  AuthenticationParams, DEFAULT_SCOPE, EXCHANGE_TOKEN_PATH, GrantTypeEnum,
+  IAccessTokenResponse, IMercadolibreAPIAuth, MercadolibreAPIAuth
+};
+

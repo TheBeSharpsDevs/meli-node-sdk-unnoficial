@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { MercadolibreAPIAuth } from "./auth/auth";
+import { MercadolibreAPIAuth } from "./auth";
 import { IMercadolibreAPIConfig, createAxios } from "./base";
 
 export class MercadolibreAPI {
@@ -19,8 +19,8 @@ export class MercadolibreAPI {
   }
 }
 
-export * from "./auth/auth";
+export * from "./auth";
 export * from "./base";
 export * from "./countries";
 export * from "./errors";
-export default MercadolibreAPI;
+

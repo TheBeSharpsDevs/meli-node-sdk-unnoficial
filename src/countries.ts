@@ -1,6 +1,6 @@
 import { Country } from "./base";
 
-export const countries: Country[] = [
+const countries: Country[] = [
   {
     default_currency_id: "HNL",
     id: "MHN",
@@ -116,3 +116,7 @@ export const countries: Country[] = [
     domain_url: "com.ni",
   },
 ];
+
+export {
+  countries
+};

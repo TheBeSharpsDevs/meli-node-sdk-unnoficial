@@ -1,19 +1,19 @@
 import axios from "axios";
 
-export function createAxios() {
+function createAxios() {
   return axios.create({
     baseURL: `https://api.mercadolibre.com`,
   });
 }
 
-export interface Country {
+interface Country {
   default_currency_id: string;
   id: string;
   name: string;
   domain_url: Domain;
 }
 
-export type Domain =
+type Domain =
   | "hn"
   | "cl"
   | "com.uy"
@@ -34,7 +34,7 @@ export type Domain =
   | "com.mx"
   | "com.ni";
 
-export interface IMercadolibreAPIConfig {
+interface IMercadolibreAPIConfig {
   redirectUri?: string;
   clientId?: string;
   clientSecret?: string;
@@ -43,3 +43,9 @@ export interface IMercadolibreAPIConfig {
   accessToken?: string;
   refreshToken?: string;
 }
+
+export {
+  Country,
+  Domain,
+  IMercadolibreAPIConfig, createAxios
+};

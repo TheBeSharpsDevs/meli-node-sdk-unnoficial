@@ -2,10 +2,8 @@
   "name": "meli-node-sdk-unnoficial",
   "version": "0.0.6",
   "description": "A Mercadolibre NodeJS SDK with the goal of be the most updated SKD available for NodeJS",
-  "main": "lib/main.js",
-  "module": "lib/main.mjs",
+  "main": "./lib/main.js",
   "types": "./lib/main.d.ts",
-  "type": "commonjs",
   "scripts": {
     "format": "prettier --write .",
     "build": "npm run clean && tsup-node",
@@ -16,21 +14,47 @@
     "clean": "rimraf lib"
   },
   "files": [
-    "./lib/*"
+    "./lib/",
+    "auth.cjs",
+    "auth.js",
+    "base.cjs",
+    "base.js",
+    "errors.cjs",
+    "errors.js",
+    "main.cjs",
+    "main.js",
+    "auth.d.ts",
+    "base.d.ts",
+    "errors.d.ts",
+    "main.d.ts"
   ],
   "exports": {
     ".": {
-      "import": "./lib/main.mjs",
-      "require": "./lib/main.js"
+      "types": "./lib/main.d.ts",
+      "import": "./lib/main.js",
+      "require": "./lib/main.cjs"
+    },
+    "./base": {
+      "types": "./base.d.ts",
+      "import": "./base.js",
+      "require": "./base.cjs"
     },
     "./auth": {
-      "import": "./lib/auth.mjs",
-      "require": "./lib/auth.js"
+      "types": "./auth.d.ts",
+      "import": "./auth.js",
+      "require": "./auth.cjs"
     },
     "./errors": {
-      "import": "./lib/errors.mjs",
-      "require": "./lib/errors.js"
-    }
+      "types": "./errors.d.ts",
+      "import": "./errors.js",
+      "require": "./errors.cjs"
+    },
+    "./countries": {
+      "types": "./countries.d.ts",
+      "import": "./countries.js",
+      "require": "./countries.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "axios": "1.5.1"

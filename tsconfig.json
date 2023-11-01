@@ -7,6 +7,12 @@
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
     "esModuleInterop": true,
     "moduleResolution": "node",
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "lib": [
+      "ES2021",
+      "ES2022.Object"
+    ]
   },
   "exclude": [
     ".husky",
